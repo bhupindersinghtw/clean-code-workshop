@@ -20,12 +20,12 @@ public class CustomerTest {
     }
 
     @Test
-    public void testStatementReturnString(){
+    public void testStatementReturnString() {
         Assert.assertTrue(testCustomer.statement() instanceof String);
     }
 
     @Test
-    public void testStatementForNoRentals(){
+    public void testStatementForNoRentals() {
         StringBuilder expectedStatement = new StringBuilder();
         expectedStatement.append("Rental Record for " + testCustomer.getName() + "\n");
         expectedStatement.append("Amount owed is " + String.valueOf(0.0) + "\n");
@@ -37,7 +37,19 @@ public class CustomerTest {
     }
 
     @Test
-    public void testStatementForTwoRegularMovies(){
+    public void testStatementForNoRentalsHtml() {
+        StringBuilder expectedStatement = new StringBuilder();
+        expectedStatement.append("<h1>Rental Record for <b>" + testCustomer.getName() + "</b></h1><br/>");
+        expectedStatement.append("Amount owed is <b>" + String.valueOf(0.0) + "</b><br/>");
+        expectedStatement.append("You earned <b>" + String.valueOf(0)
+                + "</b> frequent renter points");
+
+        Assert.assertEquals(expectedStatement.toString(),
+                testCustomer.htmlStatement());
+    }
+
+    @Test
+    public void testStatementForTwoRegularMovies() {
 
         testCustomer.addRental(new Rental(regularMovie, 2));
         testCustomer.addRental(new Rental(regularMovie, 3));
@@ -59,7 +71,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testStatementForTwoNewRelease(){
+    public void testStatementForTwoNewRelease() {
 
         testCustomer.addRental(new Rental(newRelease, 1));
         testCustomer.addRental(new Rental(newRelease, 3));
@@ -76,7 +88,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testStatementForTwoChildrenMovies(){
+    public void testStatementForTwoChildrenMovies() {
 
         testCustomer.addRental(new Rental(childrenMovie, 3));
         testCustomer.addRental(new Rental(childrenMovie, 6));
@@ -93,7 +105,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testStatementForMultipleMoviesRental(){
+    public void testStatementForMultipleMoviesRental() {
 
         testCustomer.addRental(new Rental(regularMovie, 3));
         testCustomer.addRental(new Rental(newRelease, 1));
@@ -109,5 +121,24 @@ public class CustomerTest {
 
         Assert.assertEquals(expectedStatement.toString(),
                 testCustomer.statement());
+    }
+
+    @Test
+    public void testStatementForMultipleMoviesRentalHtml() {
+
+        testCustomer.addRental(new Rental(regularMovie, 3));
+        testCustomer.addRental(new Rental(newRelease, 1));
+        testCustomer.addRental(new Rental(childrenMovie, 6));
+
+        StringBuilder expectedStatement = new StringBuilder();
+        expectedStatement.append("<h1>Rental Record for <b>" + testCustomer.getName() + "</b></h1><br/>");
+        expectedStatement.append("" + regularMovie.getTitle() + "" + String.valueOf(3.5) + "<br/>");
+        expectedStatement.append("" + newRelease.getTitle() + "" + String.valueOf(3.0) + "<br/>");
+        expectedStatement.append("" + childrenMovie.getTitle() + "" + String.valueOf(6.0) + "<br/>");
+        expectedStatement.append("Amount owed is <b>" + String.valueOf(12.5) + "</b><br/>");
+        expectedStatement.append("You earned <b>" + String.valueOf(3) + "</b> frequent renter points");
+
+        Assert.assertEquals(expectedStatement.toString(),
+                testCustomer.htmlStatement());
     }
 }
